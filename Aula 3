@@ -1,0 +1,74 @@
+import pandas as pd 
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import plotly.express as px
+
+df_limpo.head()
+
+df_limpo["senioridade"].value_counts().plot(kind="bar", title="distribuicao de senioridade")
+
+sns.barplot(data=df_limpo, x="senioridade", y="usd")
+
+plt.figure(figsize=(8,5))
+sns.barplot(data=df_limpo, x="senioridade", y="usd")
+plt.title("salario medio por nivel de senioridade")
+plt.xlabel("senioridade")
+plt.ylabel("salario medio anual(USD)")
+plt.show()
+
+df_limpo.groupby("senioridade")["usd"].mean().sort_values(ascending=False)
+ordem = df_limpo.groupby("senioridade")["usd"].mean().sort_values(ascending=False).index
+
+plt.figure(figsize=(8,5))
+sns.barplot(data=df_limpo, x="senioridade", y="usd", order=ordem)
+plt.title("salario medio por nivel de senioridade")
+plt.xlabel("senioridade")
+plt.ylabel("salario medio anual(USD)")
+plt.show()
+
+plt.figure(figsize=(10,5))
+sns.histplot(df_limpo["usd"], bins=50, kde=True)
+plt.title("distribuicao dos salarios anuais")
+plt.xlabel("salario em USD")
+plt.ylabel("frequencia")
+plt.show()
+
+plt.figure(figsize=(8,5))
+sns.boxplot(x=df_limpo["usd"])
+plt.title("boxplot salario")
+plt.xlabel("salario em USD")
+plt.show()
+
+ordem_senioridade= ["junior", "pleno", "senior", "executivo"]
+
+plt.figure(figsize=(8,5))
+sns.boxplot(x="senioridade, y="usd", data=df_limpo, order=ordem_senioridade)
+plt.title("boxplot salario por senioridade")
+plt.xlabel("salario em USD")
+plt.show()
+
+plt.figure(figsize=(8,5))
+sns.boxplot(x="senioridade, y="usd", data=df_limpo, order=ordem_senioridade, palette="Set2", hue="senioridade")
+plt.title("boxplot salario por senioridade")
+plt.xlabel("salario em USD")
+plt.show()
+
+remoto_contagem = df_limpo["remoto"].value_counts().reset_index()
+remoto_contagem = ["tipo_trabalho", "quantidade"]
+
+fig = px.pie(remoto_contagem,
+             names="tipo_trabalho",
+             values="quantidade",
+             title="proporcao do tipo de trabalho"
+             )
+fig.show()
+
+fig = px.pie(remoto_contagem,
+             names="tipo_trabalho",
+             values="quantidade",
+             title="proporcao do tipo de trabalho"
+             hole=0.5
+             )
+fig.update_traces(textinfo="percent+label")
+fig.show()
